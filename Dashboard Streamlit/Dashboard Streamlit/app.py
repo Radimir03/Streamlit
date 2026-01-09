@@ -17,7 +17,7 @@ st.title("Projet Final: A311 - Industrie 4.0 et A304 - Systèmes Embarqués II (
 # -------------------------
 # AUTOREFRESH (en ms)
 # -------------------------
-count = st_autorefresh(interval=3_000, limit=None, key="mqtt_autorefresh")
+count = st_autorefresh(interval=2000, key="mqtt_refresh")
 
 # -------------------------
 # MQTT CONFIG
