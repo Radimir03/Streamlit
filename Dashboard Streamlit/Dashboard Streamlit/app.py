@@ -221,15 +221,22 @@ def publish_command(client, topic, payload_dict):
         print("Erreur publish_command:", e)
 
 # -------------------------
-# SIDEBAR : contrôle LED
+# SIDEBAR : contrôle LED (avec keys fixes)
 # -------------------------
 st.sidebar.header("Contrôle LED")
 
-st.session_state.led = st.sidebar.toggle("LED ON / OFF", value=st.session_state.led)
+# Utiliser des keys fixes pour éviter désynchronisation DOM
+led_val = st.sidebar.toggle("LED ON / OFF", value=st.session_state.led, key="ui_led_toggle")
 
-st.session_state.led_r = st.sidebar.slider("Rouge", 0, 255, st.session_state.led_r)
-st.session_state.led_g = st.sidebar.slider("Vert", 0, 255, st.session_state.led_g)
-st.session_state.led_b = st.sidebar.slider("Bleu", 0, 255, st.session_state.led_b)
+r_val = st.sidebar.slider("Rouge", 0, 255, st.session_state.led_r, key="ui_led_r")
+g_val = st.sidebar.slider("Vert", 0, 255, st.session_state.led_g, key="ui_led_g")
+b_val = st.sidebar.slider("Bleu", 0, 255, st.session_state.led_b, key="ui_led_b")
+
+# Mettre à jour session_state de façon contrôlée
+st.session_state.led = bool(led_val)
+st.session_state.led_r = int(r_val)
+st.session_state.led_g = int(g_val)
+st.session_state.led_b = int(b_val)
 
 current_rgb = (st.session_state.led_r, st.session_state.led_g, st.session_state.led_b)
 
@@ -252,8 +259,8 @@ st.sidebar.write("☀️ LED ON" if st.session_state.led else "🌑 LED OFF")
 if "sync" not in st.session_state:
     st.session_state.sync = False
 
-# --- Bouton poussoir : toggle
-if st.sidebar.button("🧭 🔁 Synchro"):
+# Bouton poussoir : toggle (avec key fixe)
+if st.sidebar.button("🧭 🔁 Synchro", key="ui_sync_button"):
     st.session_state.sync = not st.session_state.sync
 
     payload = {
